@@ -2,18 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Legal & Compliance | CreatorSuite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { word-wrap: break-word; }
+        .legal-section p, .legal-section li { overflow-wrap: break-word; }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-300 font-sans antialiased p-8 md:p-20">
+<body class="bg-slate-950 text-slate-300 font-sans antialiased p-4 sm:p-8 md:p-20 overflow-x-hidden">
 
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-4xl mx-auto legal-section">
         <a href="creatorsuite.html" class="text-blue-500 hover:text-blue-400 mb-8 block">← Back to Website</a>
         
         <h1 class="text-4xl font-bold text-white mb-4">Legal & Compliance Center</h1>
-        <p class="text-sm text-slate-500 mb-12">Version: "AI Misbehavior Shield" Edition</p>
 
         <section class="mb-16 border-b border-slate-800 pb-12" id="privacy">
             <h2 class="text-2xl font-bold text-white mb-6">🔒 Privacy Policy</h2>
@@ -75,6 +79,12 @@
                 <p><strong>8. Refund Policy & Account Suspension</strong><br>
                 - <strong>Termination for Breach:</strong> We reserve the right to ban or suspend any account found violating these Terms, including generating illegal content, abusing the referral system, or attempting to reverse-engineer the platform.<br>
                 - <strong>Effect of Ban:</strong> If your account is banned for a violation of these Terms, you forfeit all remaining subscription time and credits.</p>
+
+                <p><strong>9. Governing Law, Jurisdiction, and Mandatory Law Carve-Out</strong><br>
+                These Terms are governed by the laws of India. Subject to applicable mandatory consumer-protection law, the courts at New Delhi, India, shall have exclusive jurisdiction over disputes arising from or related to the App, payments, subscriptions, and generated outputs. Where non-waivable local law grants a consumer the right to file in local forums, that right will apply only to the minimum extent required by such law.</p>
+
+                <p><strong>10. Policy Version and Regulatory Override</strong><br>
+                The policy/version in force at the time of purchase applies to that purchase, except where a later law, regulation, court order, or binding government direction requires a different outcome. In such cases, we will comply with mandatory law to the extent required.</p>
             </div>
         </section>
 
@@ -93,14 +103,32 @@
         <section class="mb-16 border-b border-slate-800 pb-12" id="refunds">
             <h2 class="text-2xl font-bold text-white mb-6">💰 Refund & Cancellation Policy</h2>
             <div class="space-y-4 text-sm leading-relaxed">
-                <p><strong>1. Digital Product Nature</strong><br>
-                CreatorSuite AI provides non-tangible, irrevocable digital subscriptions. Once a subscription is activated and credits are issued to your account, the product is considered "consumed."</p>
-            
-                <p><strong>2. Technical Failure & Activation Guarantee</strong><br>
+                <p><strong>1. Digital Product Consumption</strong><br>
+                CreatorSuite AI operates on a credit-based system. A refund is only eligible if requested within <strong>7 days of purchase</strong>, provided that <strong>zero (0) AI credits</strong> have been utilized. Our system maintains an immutable <code>credit_usage_ledger</code>; if <strong>any credits are consumed through any app action/output</strong>, the plan is considered consumed and ineligible for refund.</p>
+
+                <p><strong>2. Processing Fees</strong><br>
+                All eligible refunds are subject to a <strong>3% transaction processing fee</strong> deduction to cover non-refundable gateway commissions.</p>
+
+                <p><strong>3. Government Taxes, Duties, and Levies</strong><br>
+                Any <strong>taxes, duties, withholding, or government levies</strong> (including GST, VAT, sales tax, or similar) that were collected, remitted, or withheld in connection with your payment are <strong>not refundable by us in any case</strong>, regardless of the reason for any refund of subscription fees or credits, <strong>except where applicable mandatory law expressly requires otherwise</strong>.</p>
+
+                <p><strong>4. Technical Failure & Activation Guarantee</strong><br>
                 If your payment is successful but the subscription is not activated due to a system error, our first priority is to <strong>manually activate your plan</strong> within 24 hours of notification. If we are unable to resolve the activation within 5 business days, a full refund will be issued to your original payment method.</p>
-            
-                <p><strong>3. Duplicate Charges</strong><br>
-                In the event of accidental double-billing for the same period, the second charge will be refunded within 5-7 business days upon verification.</p>
+
+                <p><strong>5. Duplicate Charges</strong><br>
+                In the event of accidental double-billing for the same period <strong>for the same account</strong>, the second charge will be refunded within 5-7 business days upon verification.</p>
+
+                <p><strong>6. No Partial Refund After Consumption</strong><br>
+                Except where required by applicable mandatory law, partial or prorated refunds are not available once any credits are consumed.</p>
+
+                <p><strong>7. Dispute Notice Timelines</strong><br>
+                Refund requests based on non-usage must be raised within <strong>7 days</strong> of payment. Other billing disputes must be raised within <strong>30 days</strong> of the charge date. Disputes raised after 30 days will be declined, except where applicable mandatory law requires otherwise.</p>
+
+                <p><strong>8. Usage Records and Evidence</strong><br>
+                We maintain system records including authentication events, timestamps, plan activations, and credit consumption logs (including <code>credit_usage_ledger</code>) for support, security, and dispute handling. Detailed logs are retained for a limited operational period of <strong>30 to 35 days</strong> to manage infrastructure cost and operational efficiency, and our records are treated as authoritative unless proven otherwise with reliable evidence.</p>
+
+                <p><strong>9. Fraud, Abuse, Chargebacks, and Cost Recovery</strong><br>
+                We may, at our sole reasonable discretion, investigate and take operational action (including suspension, termination, access restriction, refund denial, and benefit forfeiture) against accounts involved in suspected fraud, abusive refund/chargeback behavior, misrepresentation, or attempts to obtain services without payment. Where abuse, fraud, or bad-faith conduct is established through applicable legal process (including court, arbitration, or other competent forum), we reserve the right to seek recovery of reasonable legal costs, administrative costs, and damages to the maximum extent permitted by law. This clause does not limit a user’s non-waivable legal rights under mandatory law.</p>
             </div>
         </section>
 
@@ -117,7 +145,7 @@
         </section>
         
         <div class="text-center text-xs text-slate-600 mt-20">
-            © 2025 CreatorCanvas. All Rights Reserved. | Last Updated: Jan 16, 2025
+            © 2025 CreatorCanvas. All Rights Reserved. | Last Updated: Apr 3, 2026
         </div>
     </div>
 </body>
