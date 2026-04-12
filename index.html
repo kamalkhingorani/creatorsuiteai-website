@@ -375,6 +375,12 @@ async function setGlobalPricing() {
 }
 document.addEventListener('DOMContentLoaded', function() {
     setGlobalPricing();
+    document.querySelectorAll('a[href*="app.creatorsuiteai.org/checkout"]').forEach(function (a) {
+        a.addEventListener('click', function (ev) {
+            var msg = 'Before paying: create and verify your account at https://app.creatorsuiteai.org/signup first. Your subscription only activates for that same email — wrong email may not be refundable. Continue to checkout?';
+            if (!window.confirm(msg)) ev.preventDefault();
+        });
+    });
     var wrap = document.getElementById('pricing-compare');
     var btnFree = document.getElementById('plan-toggle-free');
     var btnPro = document.getElementById('plan-toggle-pro');
