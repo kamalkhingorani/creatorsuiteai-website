@@ -36,12 +36,12 @@
     <div class="card" id="card-preflight">
       <div class="banner">
         <p style="margin:0 0 0.5rem;font-weight:700;color:#fde68a;">Before you pay on this page</p>
-        <p style="margin:0;">Create your account by signing up and <strong>verify your email</strong> first. Subscription applies only to that same email.</p>
+        <p style="margin:0;">You must <strong>verify your email</strong> after signup (link in your inbox). Unverified emails cannot log in — if you pay with the wrong or unverified address, Pro may not apply and we may not be able to refund.</p>
         <p style="margin:0.5rem 0 0;"><a id="signup-link" href="https://app.creatorsuiteai.org/signup" target="_blank" rel="noopener">Open app signup</a></p>
       </div>
       <label class="row">
         <input type="checkbox" id="preflight-ok" />
-        <span>I have signed up, verified my email, and will use the <strong>same email</strong> below.</span>
+        <span>I have signed up, <strong>opened the verification link</strong>, can log in on the app with this email, and will enter that <strong>same email</strong> below.</span>
       </label>
       <button type="button" class="primary" id="btn-preflight">Continue to email &amp; payment</button>
     </div>
@@ -167,7 +167,7 @@
         return;
       }
       if (!x.j.exists) {
-        setErr('No account found for this email. Sign up and verify first, then try again with the same email.');
+        setErr(x.j.error || 'No verified app account found for this email. Sign up on the app, verify your email, then try again.');
         state.emailOk = false;
         btnPay.style.display = 'none';
         return;
