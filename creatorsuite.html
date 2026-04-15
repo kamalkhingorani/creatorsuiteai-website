@@ -269,7 +269,7 @@
                         <li class="flex gap-2 text-white"><span>&#128640;</span> <b>10 Gens / Day</b></li>
                         <li class="flex gap-2 text-emerald-400"><span>&#10003;</span> No Ads</li>
                     </ul>
-                    <a href="https://app.creatorsuiteai.org/checkout?plan=weekly" data-cs-plan="weekly" class="cs-pay-btn w-full py-2 bg-blue-600 hover:bg-blue-500 text-white text-center rounded-lg text-sm font-bold transition shadow-lg shadow-blue-900/25">Buy Weekly</a>
+                    <a href="checkout.html?plan=weekly" data-cs-plan="weekly" class="cs-pay-btn w-full py-2 bg-blue-600 hover:bg-blue-500 text-white text-center rounded-lg text-sm font-bold transition shadow-lg shadow-blue-900/25">Buy Weekly</a>
                 </div>
 
                 <div class="pricing-card pricing-card-paid pricing-card-popular bg-slate-900 border-2 border-purple-600/50 rounded-xl p-4 sm:p-6 relative flex flex-col min-w-0 shadow-lg shadow-purple-900/10">
@@ -283,7 +283,7 @@
                         <li class="flex gap-2 text-white"><span>&#128293;</span> <b>15 Gens / Day</b></li>
                         <li class="flex gap-2 text-emerald-400"><span>&#10003;</span> No Ads</li>
                     </ul>
-                    <a href="https://app.creatorsuiteai.org/checkout?plan=monthly" data-cs-plan="monthly" class="cs-pay-btn w-full py-2 bg-purple-600 hover:bg-purple-500 text-center rounded-lg text-sm font-bold text-white transition">Buy Monthly</a>
+                    <a href="checkout.html?plan=monthly" data-cs-plan="monthly" class="cs-pay-btn w-full py-2 bg-purple-600 hover:bg-purple-500 text-center rounded-lg text-sm font-bold text-white transition">Buy Monthly</a>
                 </div>
 
                 <div class="pricing-card pricing-card-paid bg-slate-900 border-2 border-emerald-500 rounded-xl p-4 sm:p-6 flex flex-col relative min-w-0 lg:-translate-y-4 shadow-xl shadow-emerald-900/20">
@@ -312,6 +312,7 @@
         &copy; <script>document.write(new Date().getFullYear())</script> CreatorSuite AI. 
         <span class="text-slate-400">A CreatorCanvas brand.</span>
     </div>
+    <p class="text-[10px] sm:text-xs text-slate-600 max-w-3xl mx-auto leading-relaxed mb-3 px-2 font-medium">CreatorCanvas™ and CreatorSuite AI™ are trademarks of Kamal Kant Hingorani. Patent &amp; Trademark applications filed (India). © 2026 Kamal Kant Hingorani. All rights reserved.</p>
     <p class="text-[10px] sm:text-xs text-slate-600 max-w-3xl mx-auto leading-relaxed mb-3 px-2">India copyright applications filed (Copyright Office): <span class="text-slate-500">CreatorSuite AI™ &mdash; Source Code</span> diary no. SW-15649/2026-CO; <span class="text-slate-500">CreatorSuite AI™ &mdash; User Interface and Design</span> diary no. AT-15643/2026-CO (filed 6 Apr 2026). Registration subject to examination. <span class="text-slate-500">Creator Canvas™</span>, <span class="text-slate-500">CreatorSuite™</span>, and <span class="text-slate-500">CreatorSuite AI™</span> are trademarks claimed by the owner; third-party use without permission is not authorized.</p>
     
     <div class="footer-links flex flex-wrap justify-center gap-3 sm:gap-6">
@@ -333,7 +334,7 @@
 
 <script>
 function applyCheckoutLinks(countryCode) {
-    /* Buy links: /checkout?plan=… in HTML */
+    /* Buy links: checkout.html?plan=… (website); payment APIs on app host */
 }
 async function setGlobalPricing() {
     try {
@@ -373,9 +374,9 @@ async function setGlobalPricing() {
 }
 document.addEventListener('DOMContentLoaded', function() {
     setGlobalPricing();
-    document.querySelectorAll('a[href*="app.creatorsuiteai.org/checkout"]').forEach(function (a) {
+    document.querySelectorAll('a.cs-pay-btn[href*="checkout.html"]').forEach(function (a) {
         a.addEventListener('click', function (ev) {
-            var msg = 'Before paying: create and verify your account at https://app.creatorsuiteai.org/signup first. Your subscription only activates for that same email — wrong email may not be refundable. Continue to checkout?';
+            var msg = 'Before subscribing or making payment, please ensure you have created your account by signing up and have verified your email at https://app.creatorsuiteai.org/signup. Use the same email when you pay. You will then continue to our secure checkout in the browser. Continue?';
             if (!window.confirm(msg)) ev.preventDefault();
         });
     });

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Subscribe — CreatorSuite AI™</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    :root { --bg:#0f172a; --card:#1e293b; --text:#f8fafc; --muted:#94a3b8; --pink:#ec4899; --amber:#fbbf24; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, Segoe UI, Roboto, sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    .wrap { max-width: 440px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    a { color: var(--pink); }
+    h1 { font-size: 1.5rem; margin: 0 0 0.5rem; }
+    .sub { color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
+    .card { background: var(--card); border: 1px solid #334155; border-radius: 1rem; padding: 1.5rem; margin-top: 1.5rem; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+    .banner { background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.35); border-radius: 0.5rem; padding: 0.75rem 1rem; font-size: 0.8rem; line-height: 1.5; color: #fef3c7; margin-bottom: 1rem; }
+    label { display:block; font-size: 0.75rem; color: var(--muted); margin-bottom: 0.25rem; }
+    input[type="email"] { width:100%; padding: 0.6rem 0.75rem; border-radius: 0.5rem; border: 1px solid #475569; background: #0f172a; color: var(--text); font-size: 1rem; }
+    input[type="checkbox"] { margin-top: 0.2rem; }
+    .row { display:flex; gap:0.75rem; align-items:flex-start; margin-top: 1rem; cursor: pointer; font-size: 0.875rem; color: #e2e8f0; }
+    button.primary { width:100%; margin-top: 1rem; padding: 0.85rem; border:0; border-radius: 0.5rem; background: var(--pink); color: #fff; font-weight: 800; font-size: 0.9rem; cursor: pointer; }
+    button.primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .err { color: #fbbf24; font-size: 0.875rem; margin-top: 0.75rem; white-space: pre-wrap; }
+    .back { font-size: 0.8rem; color: var(--muted); background: none; border: 0; cursor: pointer; padding: 0; margin-bottom: 0.75rem; }
+    .region { font-size: 0.75rem; color: var(--muted); margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="./creatorsuite.html" style="font-size:0.85rem;">← CreatorSuite AI™ pricing</a>
+    <h1 style="margin-top:1rem;">Complete purchase</h1>
+    <p class="sub" id="plan-line">Loading…</p>
+    <p class="region" id="region-line"></p>
+
+    <div class="card" id="card-preflight">
+      <div class="banner">
+        <p style="margin:0 0 0.5rem;font-weight:700;color:#fde68a;">Before you pay on this page</p>
+        <p style="margin:0;">Create your account by signing up and <strong>verify your email</strong> first. Subscription applies only to that same email.</p>
+        <p style="margin:0.5rem 0 0;"><a id="signup-link" href="https://app.creatorsuiteai.org/signup" target="_blank" rel="noopener">Open app signup</a></p>
+      </div>
+      <label class="row">
+        <input type="checkbox" id="preflight-ok" />
+        <span>I have signed up, verified my email, and will use the <strong>same email</strong> below.</span>
+      </label>
+      <button type="button" class="primary" id="btn-preflight">Continue to email &amp; payment</button>
+    </div>
+
+    <div class="card" id="card-pay" style="display:none;">
+      <button type="button" class="back" id="btn-back">← Back</button>
+      <label for="email">Account email</label>
+      <input type="email" id="email" autocomplete="email" placeholder="same as your verified signup email" />
+      <p class="sub" style="margin-top:0.5rem;">Must match your app account. India: Razorpay (INR). Outside India: Dodo (USD).</p>
+      <div class="err" id="err"></div>
+      <button type="button" class="primary" id="btn-check">Check email &amp; continue</button>
+      <button type="button" class="primary" id="btn-pay" style="display:none;">Continue to secure payment</button>
+      <p style="text-align:center;margin-top:1rem;">
+        <a id="signup-link-2" href="https://app.creatorsuiteai.org/signup" target="_blank" rel="noopener">Need an account? Sign up</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  var API_BASE = 'https://app.creatorsuiteai.org';
+  function qs(name) {
+    var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
+  }
+  function normalizePlan(p) {
+    p = (p || 'monthly').toLowerCase();
+    if (p === 'yearly' || p === 'annual') return 'annual';
+    if (p === 'weekly') return 'weekly';
+    return 'monthly';
+  }
+  var planApi = normalizePlan(qs('plan'));
+  var planDodo = planApi === 'annual' ? 'yearly' : planApi;
+  var prefillEmail = qs('email') || '';
+
+  var state = { region: null, emailOk: false, busy: false, rzpKey: '' };
+
+  var elPreflight = document.getElementById('card-preflight');
+  var elPay = document.getElementById('card-pay');
+  var elPlan = document.getElementById('plan-line');
+  var elRegion = document.getElementById('region-line');
+  var elErr = document.getElementById('err');
+  var elEmail = document.getElementById('email');
+  var btnPreflight = document.getElementById('btn-preflight');
+  var btnBack = document.getElementById('btn-back');
+  var btnCheck = document.getElementById('btn-check');
+  var btnPay = document.getElementById('btn-pay');
+  var cbPreflight = document.getElementById('preflight-ok');
+
+  var planLabel = planApi === 'annual' ? 'Yearly' : planApi === 'weekly' ? 'Weekly' : 'Monthly';
+  elPlan.textContent = 'Plan: ' + planLabel + ' — secure checkout in your browser.';
+
+  if (prefillEmail) elEmail.value = prefillEmail;
+
+  function setErr(t) { elErr.textContent = t || ''; }
+
+  fetch(API_BASE + '/api/checkout/public-config').then(function (r) { return r.json(); }).then(function (c) {
+    state.rzpKey = (c.razorpayKeyId || '').trim();
+    if (c.appSignupUrl) {
+      var a = document.getElementById('signup-link'); if (a) a.href = c.appSignupUrl;
+      var a2 = document.getElementById('signup-link-2'); if (a2) a2.href = c.appSignupUrl;
+    }
+  }).catch(function () {});
+
+  fetch(API_BASE + '/api/visitor-region').then(function (r) { return r.json(); }).then(function (d) {
+    state.region = d;
+    if (d && d.isIndia) elRegion.textContent = 'Billing region: India (INR · Razorpay)';
+    else elRegion.textContent = 'Billing region: International (USD · Dodo Payments)';
+  }).catch(function () {
+    state.region = { isIndia: false, countryCode: null };
+    elRegion.textContent = 'Billing region: detecting… defaulting to international if unsure.';
+  });
+
+  btnPreflight.onclick = function () {
+    if (!cbPreflight.checked) {
+      alert('Please confirm you have signed up and verified your email.');
+      return;
+    }
+    elPreflight.style.display = 'none';
+    elPay.style.display = 'block';
+  };
+
+  btnBack.onclick = function () {
+    elPay.style.display = 'none';
+    elPreflight.style.display = 'block';
+    setErr('');
+    state.emailOk = false;
+    btnCheck.style.display = 'block';
+    btnPay.style.display = 'none';
+  };
+
+  function fmtPayErr(data) {
+    if (!data || typeof data !== 'object') return 'Payment error';
+    var d = data;
+    var lines = [];
+    if (d.stage) lines.push('Step: ' + String(d.stage).replace(/_/g, ' '));
+    if (d.error) lines.push(String(d.error));
+    if (d.hint) lines.push(String(d.hint));
+    return lines.join('\n\n') || 'Unknown error';
+  }
+
+  btnCheck.onclick = function () {
+    var em = elEmail.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) {
+      setErr('Enter a valid email address.');
+      return;
+    }
+    state.busy = true;
+    btnCheck.disabled = true;
+    setErr('');
+    fetch(API_BASE + '/api/checkout/validate-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: em })
+    }).then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); }).then(function (x) {
+      state.busy = false;
+      btnCheck.disabled = false;
+      if (!x.r.ok) {
+        setErr(x.j.error || 'Could not verify email.');
+        state.emailOk = false;
+        btnPay.style.display = 'none';
+        btnCheck.style.display = 'block';
+        return;
+      }
+      if (!x.j.exists) {
+        setErr('No account found for this email. Sign up and verify first, then try again with the same email.');
+        state.emailOk = false;
+        btnPay.style.display = 'none';
+        return;
+      }
+      state.emailOk = true;
+      btnCheck.style.display = 'none';
+      btnPay.style.display = 'block';
+    }).catch(function (e) {
+      state.busy = false;
+      btnCheck.disabled = false;
+      setErr(e.message || 'Network error');
+    });
+  };
+
+  btnPay.onclick = function () {
+    if (!state.emailOk) return;
+    var em = elEmail.value.trim();
+    if (!state.region) {
+      setErr('Still detecting region. Wait a moment and try again.');
+      return;
+    }
+    if (state.region.isIndia) openRzp(em);
+    else openDodo(em);
+  };
+
+  function openDodo(em) {
+    state.busy = true;
+    btnPay.disabled = true;
+    setErr('');
+    fetch(API_BASE + '/api/checkout/intl-url?plan=' + encodeURIComponent(planDodo))
+      .then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); })
+      .then(function (x) {
+        state.busy = false;
+        btnPay.disabled = false;
+        if (!x.r.ok || !x.j.url) {
+          setErr(fmtPayErr(x.j));
+          return;
+        }
+        var u = new URL(String(x.j.url).trim());
+        u.searchParams.set('email', em);
+        u.searchParams.set('plan_type', planDodo);
+        u.searchParams.set('user_email', em);
+        window.location.href = u.toString();
+      })
+      .catch(function (e) {
+        state.busy = false;
+        btnPay.disabled = false;
+        setErr(e.message || 'Could not load international checkout.');
+      });
+  }
+
+  function openRzp(em) {
+    var key = state.rzpKey;
+    if (!key) {
+      setErr('Payment config still loading. Wait a second and try again.');
+      return;
+    }
+    state.busy = true;
+    btnPay.disabled = true;
+    setErr('');
+    fetch(API_BASE + '/api/payments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        planType: planApi,
+        userEmail: em,
+        location: state.region.countryCode || 'Unknown'
+      })
+    })
+      .then(function (r) { return r.text().then(function (t) {
+        var j = {};
+        try { j = t ? JSON.parse(t) : {}; } catch (e) { j = { error: t.slice(0, 400) }; }
+        return { ok: r.ok, j: j };
+      }); })
+      .then(function (x) {
+        if (!x.ok) {
+          state.busy = false;
+          btnPay.disabled = false;
+          setErr(fmtPayErr(x.j));
+          return;
+        }
+        var order = x.j;
+        var options = {
+          key: key,
+          amount: order.amount,
+          currency: order.currency,
+          name: 'CreatorSuite AI™',
+          description: planLabel + ' Subscription',
+          order_id: order.orderId,
+          handler: function (resp) {
+            fetch(API_BASE + '/api/payments', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: resp.razorpay_order_id,
+                razorpay_payment_id: resp.razorpay_payment_id,
+                razorpay_signature: resp.razorpay_signature,
+                userEmail: em,
+                planType: planApi
+              })
+            })
+              .then(function (r) { return r.json().then(function (j) { return { r: r, j: j }; }); })
+              .then(function (v) {
+                if (v.j.success) {
+                  alert('Payment successful! Your Pro plan is active. You can sign in to the app.');
+                  window.location.href = 'https://app.creatorsuiteai.org/login';
+                } else {
+                  alert('Verification issue:\n\n' + fmtPayErr(v.j));
+                }
+              })
+              .catch(function (e) {
+                alert(e.message || 'Verify failed');
+              });
+          },
+          prefill: { email: em },
+          theme: { color: '#EC4899' },
+          config: {
+            display: {
+              blocks: {
+                upi: { name: 'Pay via UPI (Zero Fee)', instruments: [{ method: 'upi' }] },
+                other: { name: 'Other Payment Methods', instruments: [{ method: 'card' }, { method: 'netbanking' }] }
+              },
+              sequence: ['block.upi', 'block.other'],
+              preferences: { show_default_blocks: false }
+            }
+          }
+        };
+        var Rzp = window.Razorpay;
+        if (!Rzp) {
+          state.busy = false;
+          btnPay.disabled = false;
+          setErr('Razorpay script failed to load. Check your network or ad blocker.');
+          return;
+        }
+        var rzp = new Rzp(options);
+        if (typeof rzp.on === 'function') {
+          rzp.on('payment.failed', function (resp) {
+            var er = (resp && resp.error) || {};
+            alert('Payment failed:\n' + (er.description || er.reason || JSON.stringify(resp)));
+          });
+        }
+        rzp.open();
+        state.busy = false;
+        btnPay.disabled = false;
+      })
+      .catch(function (e) {
+        state.busy = false;
+        btnPay.disabled = false;
+        setErr(e.message || 'Failed to start payment');
+      });
+  }
+})();
+  </script>
+</body>
+</html>
