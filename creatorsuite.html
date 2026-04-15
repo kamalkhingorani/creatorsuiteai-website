@@ -269,7 +269,7 @@
                         <li class="flex gap-2 text-white"><span>&#128640;</span> <b>10 Gens / Day</b></li>
                         <li class="flex gap-2 text-emerald-400"><span>&#10003;</span> No Ads</li>
                     </ul>
-                    <a href="checkout.html?plan=weekly" data-cs-plan="weekly" class="cs-pay-btn w-full py-2 bg-blue-600 hover:bg-blue-500 text-white text-center rounded-lg text-sm font-bold transition shadow-lg shadow-blue-900/25">Buy Weekly</a>
+                    <a href="https://app.creatorsuiteai.org/checkout?plan=weekly" data-cs-plan="weekly" class="cs-pay-btn w-full py-2 bg-blue-600 hover:bg-blue-500 text-white text-center rounded-lg text-sm font-bold transition shadow-lg shadow-blue-900/25">Buy Weekly</a>
                 </div>
 
                 <div class="pricing-card pricing-card-paid pricing-card-popular bg-slate-900 border-2 border-purple-600/50 rounded-xl p-4 sm:p-6 relative flex flex-col min-w-0 shadow-lg shadow-purple-900/10">
@@ -283,7 +283,7 @@
                         <li class="flex gap-2 text-white"><span>&#128293;</span> <b>15 Gens / Day</b></li>
                         <li class="flex gap-2 text-emerald-400"><span>&#10003;</span> No Ads</li>
                     </ul>
-                    <a href="checkout.html?plan=monthly" data-cs-plan="monthly" class="cs-pay-btn w-full py-2 bg-purple-600 hover:bg-purple-500 text-center rounded-lg text-sm font-bold text-white transition">Buy Monthly</a>
+                    <a href="https://app.creatorsuiteai.org/checkout?plan=monthly" data-cs-plan="monthly" class="cs-pay-btn w-full py-2 bg-purple-600 hover:bg-purple-500 text-center rounded-lg text-sm font-bold text-white transition">Buy Monthly</a>
                 </div>
 
                 <div class="pricing-card pricing-card-paid bg-slate-900 border-2 border-emerald-500 rounded-xl p-4 sm:p-6 flex flex-col relative min-w-0 lg:-translate-y-4 shadow-xl shadow-emerald-900/20">
@@ -334,7 +334,7 @@
 
 <script>
 function applyCheckoutLinks(countryCode) {
-    /* Buy links: checkout.html?plan=… (website); payment APIs on app host */
+    /* Buy links: app.creatorsuiteai.org/checkout?plan=… */
 }
 async function setGlobalPricing() {
     try {
@@ -374,7 +374,7 @@ async function setGlobalPricing() {
 }
 document.addEventListener('DOMContentLoaded', function() {
     setGlobalPricing();
-    document.querySelectorAll('a.cs-pay-btn[href*="checkout.html"]').forEach(function (a) {
+    document.querySelectorAll('a.cs-pay-btn[href*="app.creatorsuiteai.org/checkout"]').forEach(function (a) {
         a.addEventListener('click', function (ev) {
             var msg = 'Before subscribing or making payment, please ensure you have created your account by signing up and have verified your email at https://app.creatorsuiteai.org/signup. Use the same email when you pay. You will then continue to our secure checkout in the browser. Continue?';
             if (!window.confirm(msg)) ev.preventDefault();
