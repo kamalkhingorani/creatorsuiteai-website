@@ -1,0 +1,19 @@
+---
+alwaysApply: true
+description: Launch & IP strategy doc location; keep INTERNAL_LAUNCH_IP_STRATEGY_REFERENCE.md in sync when strategy changes.
+---
+
+## Strategy reference (read first for IP / launch / monetization context)
+
+- **Canonical file:** `INTERNAL_LAUNCH_IP_STRATEGY_REFERENCE.md` at the **repository root** (`CreatorSuiteAI Website/`).
+- Before proposing or implementing changes related to **trademark**, **copyright**, **GST**, **store distribution** (Play / Indus / Paytm), **web billing** (Razorpay / Dodo Payments / FCY checkout), **public legal notices**, **diary/TM numbers**, or **phased launch**, check that file for agreed constraints and caveats.
+
+## Auto-amend the MD when strategy changes
+
+- Whenever a change **materially updates** anything summarized in `INTERNAL_LAUNCH_IP_STRATEGY_REFERENCE.md` (e.g. new TM class decision, confirmed fees, real diary/certificate numbers, Play billing approach, phased timeline, deposit file names, or “do not implement without consent” scope), **update that Markdown file in the same task** so it stays accurate.
+- If the user **explicitly** asks **not** to touch the reference doc for a given change, skip the amendment for that change only.
+- **Do not** add **placeholder** government numbers, diary numbers, or TM application numbers to **production** UI or to the reference doc as if they were real—only **verified** values.
+
+## Safety (unchanged)
+
+- Do **not** remove or break working code, footers, or billing without **express user consent** for that edit—consistent with existing CreatorSuite architect rules.

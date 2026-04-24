@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+
+- NO UNSOLICITED CHANGES: Do not refactor, "clean up," or simplify working code.
+- PRESERVE ARCHITECTURE: Trends load from the Profile API trends_cache; DO NOT create an /api/trends endpoint.
+- NUCLEAR UI FIXES: Use inline styles and !important ONLY where global CSS is causing regressions.
+- ICON CONSTRAINTS: All Sidebar icons must be 24px-28px. Use fixed sizing.
+- SELECTIVE DELETION: Only remove the specific duplicate block identified in Sidebar.tsx.
+- DATA INTEGRITY: Respect the existing Supabase plan_type and expiry dates.

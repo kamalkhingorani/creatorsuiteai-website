@@ -1,0 +1,15 @@
+---
+alwaysApply: true
+---
+
+-DO NOT remove, simplify, or refactor existing working code unless explicitly instructed to fix a specific error.
+ - DO NOT add new libraries or "clean up" imports. 
+- ALWAYS preserve existing styling, classNames, and Tailwind configurations. 
+- PRIORITIZE "fetchWithTimeout" for all API calls to prevent dashboard hanging. 
+- SCOPE: Only modify the specific lines or functions requested. If a change affects other areas, ask for permission first. 
+- FORMATTING: Keep the existing code style. Do not reformat the entire file.
+- FORCE INLINE FIXES: When fixing UI regressions, use inline styles or !important tags to override problematic global CSS.
+- NO CODE DELETION: Never remove functional code blocks or simplify logic to "clean up."
+- FETCH PATTERN: All API calls MUST use the 'fetchWithTimeout' helper defined in page.original.tsx.
+- ICON CONSTRAINTS: Social and Store icons must never exceed 24px-28px. Use fixed sizing.
+- TIERING LOGIC: If 'usage.maxCredits' is 9999, label the plan 'SUPER ADMIN' regardless of other flags.
